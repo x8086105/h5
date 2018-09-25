@@ -1,0 +1,292 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Treasure hunter</title>
+<body>
+<script src="pixi/pixi.min.js"></script>
+<script>
+//Aliases
+let Application = PIXI.Application,
+    Container = PIXI.Container,
+    loader = PIXI.loader,
+    resources = PIXI.loader.resources,
+    Graphics = PIXI.Graphics,
+    TextureCache = PIXI.utils.TextureCache,
+    Sprite = PIXI.Sprite,
+    Text = PIXI.Text,
+    TextStyle = PIXI.TextStyle;
+
+//Create a Pixi Application
+let app = new Application({
+    antialiasing: true, 
+    transparent: false, 
+    resolution: 1
+  }
+);
+//全屏展示
+// app.renderer.view.style.position = "absolute";
+// app.renderer.view.style.display = "block";
+app.renderer.autoResize = true;
+app.renderer.resize(window.innerWidth, window.innerHeight);
+//创建Sence
+let gameChooseSence,gameOfficeholderSence,gameMinnvSence,state,scale,officeholderTop,officeholderBottom,floatVy,
+enlarge,enlargeMax,enlargeMin,narrow,boyEnlargeMax,boyEnlargeMin,boyEnlarge,boyNarrow,girlSayEnlargeMultiple,girlSayNarrowMultiple,
+boySayEnlargeMultiple,boySayNarrowMultiple;
+document.body.appendChild(app.view);
+loader
+  .add([
+    "images/changping.png",
+    "images/emperor.png",
+    "images/queen.png",
+    "images/officeholder.png",
+    "images/xinning.png",
+    "images/bg.png",
+    "images/yamen.png",
+    "images/cunfu.png",
+    "images/girlSay.png",
+    "images/boySay.png"
+  ])
+  .load(setup);
+  function setup(){
+    state=setup;
+    let bg = new Sprite(resources["images/bg.png"].texture);
+    bg.width=window.innerWidth;
+    bg.height=window.innerHeight;
+    gameChooseSence=new Container();
+    //这里加载三个人物（民女，官员，皇上）
+    scale=0.15;//人物缩放的倍数
+    let girl=new Sprite(resources["images/changping.png"].texture);
+    girl.scale.set(scale,scale);
+    girl.y=app.screen.height-girl.height;
+    let officeholder=new Sprite(resources["images/officeholder.png"].texture);
+    officeholder.scale.set(scale,scale);
+    officeholder.x=girl.width;
+    officeholder.y=app.screen.height-girl.height;
+    let emperor=new Sprite(resources["images/emperor.png"].texture);
+    emperor.scale.set(0.1,0.1);
+    emperor.x=girl.width+officeholder.width;
+    emperor.y=app.screen.height-emperor.height;
+    gameChooseSence.addChild(bg);
+    gameChooseSence.addChild(girl); 
+    gameChooseSence.addChild(officeholder);
+    gameChooseSence.addChild(emperor);
+    app.stage.addChild(gameChooseSence);
+    //app.ticker.add(delta => test(delta));
+    //开启精灵可点击事件
+    girl.buttonMode=true;
+    girl.interactive=true;
+    girl.on("click",minnvScene);
+    girl.on("mouseover",girlMourseOver);
+    girl.on("mouseout",girlMourseOut);
+    officeholder.buttonMode=true;
+    officeholder.interactive=true;
+    officeholder.on("click",officeholderScene);
+    officeholder.on("mouseover",officeholderMourseOver);
+    officeholder.on("mouseout",officeholderMourseOut);
+    
+    emperor.buttonMode=true;
+    emperor.interactive=true;
+    emperor.on("click",emperorScene);
+    emperor.on("mouseover",emperorMourseOver);
+    emperor.on("mouseout",emperorMourseOut);
+  }
+  //鼠标移动事件
+  function girlMourseOver(){
+    this.width=this.width*1.1;
+    this.height=this.height*1.1;
+    
+  }
+  function girlMourseOut(){
+    
+    this.width=this.width/1.1;
+    this.height=this.height/1.1;
+  }
+
+  function officeholderMourseOver(){
+    this.width=this.width*1.1;
+    this.height=this.height*1.1;
+  }
+  function officeholderMourseOut(){
+    
+    this.width=this.width/1.1;
+    this.height=this.height/1.1;
+  }
+  function emperorMourseOver(){
+    this.width=this.width*1.1;
+    this.height=this.height*1.1;
+  }
+  function emperorMourseOut(){
+    
+    this.width=this.width/1.1;
+    this.height=this.height/1.1;
+  }
+  //民女的展示图
+  function minnvScene(){
+    state=minnvScene;
+    gameChooseSence.visible=false;
+    gameMinnvSence=new Container();
+    let yamen=new Sprite(resources["images/yamen.png"].texture);
+    yamen.width=app.screen.width;
+    yamen.height=app.screen.height;
+    gameMinnvSence.addChild(yamen);
+    var girl=new Sprite(resources["images/changping.png"].texture);
+    girl.scale.set(0.1,0.1);
+    girl.y=app.screen.height-girl.height;
+    gameMinnvSence.addChild(girl);
+    let boy=new Sprite(resources["images/cunfu.png"].texture);
+    boy.x=app.screen.width-boy.width;
+    boy.y=app.screen.height-boy.height;
+    gameMinnvSence.addChild(boy);
+    gameMinnvSence.visible = true;
+    app.stage.addChild(gameMinnvSence);
+    let girlSay=new Sprite(resources["images/girlSay.png"].texture);
+    
+    girlSay.width=girlSay.width/50;
+    girlSay.height=girlSay.height/50;
+    girlSay.x=girl.width;
+    girlSay.y=app.screen.height-girl.height/2;
+    
+    girlSay.visible=false;
+    gameMinnvSence.addChild(girlSay);
+    let boySay=new Sprite(resources["images/boySay.png"].texture);
+    boySay.width=boySay.width/50;
+    boySay.height=boySay.height/50;
+    boySay.x=app.screen.width-boySay.width-boy.width;
+    boySay.y=app.screen.height-boy.height;
+    boySay.visible=false;
+    gameMinnvSence.addChild(boySay);
+    enlarge=1.01;
+    narrow=1/enlarge;
+    enlargeMax=girl.width*1.5;
+    enlargeMin=girl.width;
+    girlSayEnlargeMultiple=1.1;
+    girlSayNarrowMultiple=1/girlSayEnlargeMultiple;
+    boySayEnlargeMultiple=1.1;
+    boySayNarrowMultiple=1/boySayEnlargeMultiple;
+
+    boyEnlarge=1.01;
+    boyNarrow=1/boyEnlarge;
+    boyEnlargeMax=boy.width*1.5;
+    boyEnlargeMin=boy.width;
+
+    setTimeout(function(){app.ticker.add(delta => girlAnimal1(delta,girl,girlSay))},500);
+    setTimeout(function(){app.ticker.add(delta => girlAnimal2(delta,girl,girlSay))},2500);
+    setTimeout(function(){app.ticker.add(delta => cunfuAnimal1(delta,boy,boySay))},3000);
+    setTimeout(function(){app.ticker.add(delta => cunfuAnimal2(delta,boy,boySay))},5000);
+
+  }
+  //官员
+  function officeholderScene(){
+    state=officeholderScene;
+    gameOfficeholderSence=new Container();
+    let yamen=new Sprite(resources["images/yamen.png"].texture);
+    yamen.width=app.screen.width;
+    yamen.height=app.screen.height;
+    gameOfficeholderSence.addChild(yamen);
+    let officeholder=new Sprite(resources["images/officeholder.png"].texture);
+    officeholder.scale.set(scale,scale);
+    officeholder.x=app.screen.width/2-officeholder.width/2;
+    officeholder.y=app.screen.height-officeholder.height;
+    gameOfficeholderSence.addChild(officeholder);
+    gameChooseSence.visible=false;
+    gameOfficeholderSence.visible = true;
+    app.stage.addChild(gameOfficeholderSence);
+    officeholderTop=officeholder.y-10;
+    officeholderBottom=officeholder.y+10;
+    floatVy=0.5;
+    app.ticker.add(delta => officeholderFloat(delta,officeholder));
+  }
+  //皇上
+  function emperorScene(){
+    state=emperorScene;
+    gameEmperorSence=new Container();
+    let emperor=new Sprite(resources["images/emperor.png"].texture);
+    emperor.scale.set(0.1,0.1);
+    emperor.x=app.screen.width/2-emperor.width/2;
+    emperor.y=app.screen.height-emperor.height;
+    gameEmperorSence.addChild(emperor);
+    gameChooseSence.visible=false;
+    gameEmperorSence.visible = true;
+    app.stage.addChild(gameEmperorSence);
+  }
+  function officeholderFloat(delta,officeholder){
+    officeholder.y=officeholder.y+floatVy;
+    if(officeholder.y<=officeholderTop||officeholder.y>=officeholderBottom){
+      floatVy*=-1;
+    }
+  }
+  //开始播放动画
+  function girlAnimal1(delta,girl,girlSay){
+    
+    girlSay.visible=true;
+    girl.width*=enlarge;
+    girl.height*=enlarge;
+    girl.y=app.screen.height-girl.height;
+    girl.x=0;
+    girlSay.x=girl.width;
+    girlSay.y=app.screen.height-girl.height/2;
+    girlSay.width=girlSay.width*girlSayEnlargeMultiple;
+    girlSay.height=girlSay.height*girlSayEnlargeMultiple;
+    if(girl.width>=enlargeMax){
+      enlarge=1;
+      girlSayEnlargeMultiple=1;
+    }
+  }
+  function girlAnimal2(delta,girl,girlSay){
+    
+     // if(enlarge==1){
+        girl.width*=narrow;
+        girl.height*=narrow;
+        girlSay.visible=true;
+        girl.y=app.screen.height-girl.height;
+        girl.x=0;
+        girlSay.x=girl.width;
+        girlSay.y=app.screen.height-girl.height/2;
+        girlSay.width=girlSay.width*girlSayNarrowMultiple;
+        girlSay.height=girlSay.height*girlSayNarrowMultiple;
+      if(girl.width<=enlargeMin){
+        narrow=1;
+        girlSayNarrowMultiple=1;
+        girlSay.visible=false;
+      }
+     // }
+  }
+
+  function cunfuAnimal1(delta,boy,boySay){
+    boySay.visible=true;
+    boy.width*=boyEnlarge;
+    boy.height*=boyEnlarge;
+    boy.x=app.screen.width-boy.width;
+    boy.y=app.screen.height-boy.height;
+    boySay.x=app.screen.width-boySay.width-boy.width;
+    boySay.y=app.screen.height-boy.height;
+    
+    boySay.width=boySay.width*boySayEnlargeMultiple;
+    boySay.height=boySay.height*boySayEnlargeMultiple;
+      if(boy.width>=boyEnlargeMax){
+        boySayEnlargeMultiple=1;
+        boyEnlarge=1;
+        boySay.visible=true;
+      }
+  }
+  function cunfuAnimal2(delta,boy,boySay){
+
+    boy.width*=boyNarrow;
+    boy.height*=boyNarrow;
+    boy.x=app.screen.width-boy.width;
+    boy.y=app.screen.height-boy.height;
+    boySay.x=app.screen.width-boySay.width-boy.width;
+    boySay.y=app.screen.height-boy.height;
+    boySay.width=boySay.width*boySayNarrowMultiple;
+    boySay.height=boySay.height*boySayNarrowMultiple;
+    if(boy.width<=boyEnlargeMin){
+      boySayNarrowMultiple=1
+      boyNarrow=1;
+      boySay.visible=false;
+    
+    }
+  }
+
+      
+
+</script>
+</body>
