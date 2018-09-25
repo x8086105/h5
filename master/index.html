@@ -28,9 +28,30 @@ let app = new Application({
 app.renderer.autoResize = true;
 app.renderer.resize(window.innerWidth, window.innerHeight);
 //创建Sence
-let gameChooseSence,gameOfficeholderSence,gameMinnvSence,state,scale,officeholderTop,officeholderBottom,floatVy,
+let state,scale,officeholderTop,officeholderBottom,floatVy,
 enlarge,enlargeMax,enlargeMin,narrow,boyEnlargeMax,boyEnlargeMin,boyEnlarge,boyNarrow,girlSayEnlargeMultiple,girlSayNarrowMultiple,
 boySayEnlargeMultiple,boySayNarrowMultiple;
+let gameChooseSence=new Container();
+let gameMinnvSence=new Container();
+let agreeScene=new Container()
+let disagreeScene=new Container();
+let gameOfficeholderSence=new Container();
+let scenes=new Array();
+scenes[0]=gameChooseSence;
+scenes[1]=gameMinnvSence;
+scenes[2]=agreeScene;
+scenes[3]=disagreeScene;
+scenes[4]=gameOfficeholderSence;
+console.log(scenes.length);
+function setScene(j){
+  for(let i=0;i<scenes.length;i++){
+    if(i==j){
+      scenes[i].visible=true;
+    }else{
+      scenes[i].visible=false;
+    }
+  }
+}
 document.body.appendChild(app.view);
 loader
   .add([
@@ -43,15 +64,19 @@ loader
     "images/yamen.png",
     "images/cunfu.png",
     "images/girlSay.png",
-    "images/boySay.png"
+    "images/boySay.png",
+    "images/agree.png",
+    "images/disagree.png",
+    "images/agreebg.png",
+    "iamges/queen.png"
   ])
   .load(setup);
   function setup(){
+    setScene(0);
     state=setup;
     let bg = new Sprite(resources["images/bg.png"].texture);
     bg.width=window.innerWidth;
     bg.height=window.innerHeight;
-    gameChooseSence=new Container();
     //这里加载三个人物（民女，官员，皇上）
     scale=0.15;//人物缩放的倍数
     let girl=new Sprite(resources["images/changping.png"].texture);
@@ -121,23 +146,21 @@ loader
   }
   //民女的展示图
   function minnvScene(){
-    state=minnvScene;
-    gameChooseSence.visible=false;
-    gameMinnvSence=new Container();
+    
+    setScene(1);
     let yamen=new Sprite(resources["images/yamen.png"].texture);
     yamen.width=app.screen.width;
     yamen.height=app.screen.height;
-    gameMinnvSence.addChild(yamen);
+     gameMinnvSence.addChild(yamen);
     var girl=new Sprite(resources["images/changping.png"].texture);
     girl.scale.set(0.1,0.1);
     girl.y=app.screen.height-girl.height;
-    gameMinnvSence.addChild(girl);
+     gameMinnvSence.addChild(girl);
     let boy=new Sprite(resources["images/cunfu.png"].texture);
     boy.x=app.screen.width-boy.width;
     boy.y=app.screen.height-boy.height;
-    gameMinnvSence.addChild(boy);
-    gameMinnvSence.visible = true;
-    app.stage.addChild(gameMinnvSence);
+     gameMinnvSence.addChild(boy);
+    app.stage.addChild( gameMinnvSence);
     let girlSay=new Sprite(resources["images/girlSay.png"].texture);
     
     girlSay.width=girlSay.width/50;
@@ -146,14 +169,14 @@ loader
     girlSay.y=app.screen.height-girl.height/2;
     
     girlSay.visible=false;
-    gameMinnvSence.addChild(girlSay);
+     gameMinnvSence.addChild(girlSay);
     let boySay=new Sprite(resources["images/boySay.png"].texture);
     boySay.width=boySay.width/50;
     boySay.height=boySay.height/50;
     boySay.x=app.screen.width-boySay.width-boy.width;
     boySay.y=app.screen.height-boy.height;
     boySay.visible=false;
-    gameMinnvSence.addChild(boySay);
+     gameMinnvSence.addChild(boySay);
     enlarge=1.01;
     narrow=1/enlarge;
     enlargeMax=girl.width*1.5;
@@ -167,11 +190,25 @@ loader
     boyNarrow=1/boyEnlarge;
     boyEnlargeMax=boy.width*1.5;
     boyEnlargeMin=boy.width;
-
+    let agree=new Sprite(resources["images/agree.png"].texture);
+    agree.width=agree.width/2;
+    agree.height=agree.height/2;
+    agree.x=agree.width;
+    agree.y=app.screen.height-agree.height*3;
+    agree.visible=false;
+     gameMinnvSence.addChild(agree);
+    let disagree=new Sprite(resources["images/disagree.png"].texture);
+    disagree.width=disagree.width/2;
+    disagree.height=disagree.height/2;
+    disagree.x=app.screen.width-disagree.width*2;
+    disagree.y=app.screen.height-disagree.height*3;
+    disagree.visible=false;
+     gameMinnvSence.addChild(disagree);
     setTimeout(function(){app.ticker.add(delta => girlAnimal1(delta,girl,girlSay))},500);
     setTimeout(function(){app.ticker.add(delta => girlAnimal2(delta,girl,girlSay))},2500);
     setTimeout(function(){app.ticker.add(delta => cunfuAnimal1(delta,boy,boySay))},3000);
     setTimeout(function(){app.ticker.add(delta => cunfuAnimal2(delta,boy,boySay))},5000);
+    setTimeout(function(){app.ticker.add(delta => chooseResult(delta,agree,disagree))},6000);
 
   }
   //官员
@@ -187,7 +224,6 @@ loader
     officeholder.x=app.screen.width/2-officeholder.width/2;
     officeholder.y=app.screen.height-officeholder.height;
     gameOfficeholderSence.addChild(officeholder);
-    gameChooseSence.visible=false;
     gameOfficeholderSence.visible = true;
     app.stage.addChild(gameOfficeholderSence);
     officeholderTop=officeholder.y-10;
@@ -204,7 +240,6 @@ loader
     emperor.x=app.screen.width/2-emperor.width/2;
     emperor.y=app.screen.height-emperor.height;
     gameEmperorSence.addChild(emperor);
-    gameChooseSence.visible=false;
     gameEmperorSence.visible = true;
     app.stage.addChild(gameEmperorSence);
   }
@@ -285,8 +320,42 @@ loader
     
     }
   }
+  function chooseResult(dalet,agree,disagree){
+    disagree.visible=true;
+    agree.visible=true;
+    disagree.buttonMode=true;
+    disagree.interactive=true;
+    agree.buttonMode=true;
+    agree.interactive=true;
+    agree.on("click",agreeScene1);
+  }
+  function agreeScene1(){
 
-      
+    setScene(2);
+    let agreeBg=new Sprite(resources["images/agreebg.png"].texture);
+    agreeBg.width=app.screen.width;
+    agreeBg.height=app.screen.height;
+    agreeScene.addChild(agreeBg);
+    let agreeMinnv=new Sprite(resources["images/queen.png"].texture);
+    agreeMinnv.x=(app.screen.width-agreeMinnv.width)/2;
+    agreeMinnv.y=app.screen.height-agreeMinnv.height;
+    agreeScene.addChild(agreeMinnv);
+    app.stage.addChild( agreeScene);
+    
+  }
+  function disagreeScene1(){
+    
+    setScene(3);
+    let agreeBg=new Sprite(resources["images/disagreebg.png"].texture);
+    agreeBg.width=app.screen.width;
+    agreeBg.height=app.screen.height;
+    agreeScene.addChild(agreeBg);
+    let agreeMinnv=new Sprite(resources["images/nvzi.png"].texture);
+    agreeMinnv.x=(app.screen.width-agreeMinnv.width)/2;
+    agreeMinnv.y=app.screen.height-agreeMinnv.height;
+    agreeScene.addChild(agreeMinnv);
+    app.stage.addChild( agreeScene);
+  }
 
 </script>
 </body>
