@@ -140,25 +140,27 @@ loader
     "images/guansay5.png",
     "images/guansaybg5.png",
 
-    "images/king1",
-    "images/kingbg1",
-    "images/kingsay1",
-    "images/kingsaybg1",
+    "images/king1.png",
+    "images/kingbg1.png",
+    "images/kingsay1.png",
+    "images/kingsaybg1.png",
     
-    "images/king2",
-    "images/kingbg2",
-    "images/kingsay2",
-    "images/kingsaybg2",
-    "images/agree2",
-    "images/disagree2",
-    "images/king3",
-    "images/kingbg3",
-    "images/kingsay3",
-    "images/kingsaybg3",
-    "images/king4",
-    "images/kingbg4",
-    "images/kingsay4",
-    "images/kingsaybg4",
+    "images/king2.png",
+    "images/kingbg2.png",
+    "images/kingsay2.png",
+    "images/kingsaybg2.png",
+    "images/agree3.png",
+    "images/disagree3.png",
+
+    "images/king3.png",
+    "images/kingbg3.png",
+    "images/kingsay3.png",
+    "images/kingsaybg3.png",
+
+    "images/king4.png",
+    "images/kingbg4.png",
+    "images/kingsay4.png",
+    "images/kingsaybg4.png",
 
   ])
   .load(setup);
@@ -219,13 +221,13 @@ loader
     chooseking.interactive=true;
     
     chooseminnv.on("click",minnvClick)
-    .on("mouseover",minnvMourceOver).on("mouseout",minnvMourceOut);
+    .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
      chooseguan.on("click",guanClick)
-     .on("mouseover",guanMourceOver).on("mouseout",guanMourceOut);
+     .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
      chooseking.on("click",kingClick)
-     .on("mouseover",kingMourceOver).on("mouseout",kingMourceOut);
+     .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
 
   }
@@ -293,12 +295,6 @@ loader
       setTimeout(function(){app.ticker.add(delta => minnvScene3Animal(delta,minnvbg2,minnv2,saybg2,minnvsay2))},500);
     },1500);
   }
-  function minnvMourceOver(){
-      this.scale.set(1.1, 1.1);
-  }
-  function minnvMourceOut(){
-      this.scale.set(1, 1);
-  }
   //进入官员的Scene
   function guanClick(){
     setScene(6);
@@ -348,8 +344,8 @@ loader
           agree2.interactive=true;
           disagree2.buttonMode=true;
           disagree2.interactive=true;
-          agree2.on("click",agree2Click).on("mouseover",agreeMourseOver).on("mouseout",agreeMouseOut);
-          disagree2.on("click",disagree2Click).on("mouseover",disagreeMourseOver).on("mouseout",disagreeMouseOut);
+          agree2.on("click",agree2Click).on("mouseover",mouseOver).on("mouseout",mouseOut);
+          disagree2.on("click",disagree2Click).on("mouseover",mouseOver).on("mouseout",mouseOut);
           scenes[8].addChild(guanbg1);
           scenes[8].addChild(money);
           scenes[8].addChild(guan2);
@@ -361,29 +357,108 @@ loader
         }, 1000);
     }, 1000);
   }
-  function guanMourceOver(){
-      this.scale.set(1.1, 1.1);
-  }
-  function guanMourceOut(){
-      this.scale.set(1, 1);
-  }
   //进入皇上的Scene
   function kingClick(){
-    setScene(1);
-    let minnvbg1=new Sprite(resources["images/minnvbg1.png"].texture);
-    let minnv1=new Sprite(resources["images/minnv1.png"].texture);
-    minnv1.x=app.screen.width-minnv1.width;
-    minnv1.y=app.screen.height-minnv1.height;
-    scenes[1].addChild(minnvbg1);
-    setTimeout(function(){app.ticker.add(delta => girlAnimal1(delta,girl,girlSay))},500);
+    setScene(12);
+    let kingbg1=new Sprite(resources["images/kingbg1.png"].texture);
+    let king1=new Sprite(resources["images/king1.png"].texture);
+    king1.x=app.screen.width/2-king1.width/2;
+    king1.y=app.screen.height-king1.height;
+    let kingsaybg1=new Sprite(resources["images/kingsaybg1.png"].texture);
+    kingsaybg1.x=app.screen.width/2-kingsaybg1.width/2;
+    kingsaybg1.y=kingsaybg1.height/3;
+    let kingsay1=new Sprite(resources["images/kingsay1.png"].texture);
+    kingsay1.x=kingsaybg1.x+kingsaybg1.width/2-kingsay1.width/2;
+    kingsay1.y=kingsaybg1.y+kingsaybg1.height/2-kingsay1.height/2;
+
+    
+    scenes[12].addChild(kingbg1);
+    scenes[12].addChild(king1);
+    scenes[12].addChild(kingsaybg1);
+    scenes[12].addChild(kingsay1);
+    setTimeout(() => {
+      setScene(13);
+      let kingbg2=new Sprite(resources["images/kingbg2.png"].texture);
+      let king2=new Sprite(resources["images/king2.png"].texture);
+      king2.x=app.screen.width/2-king2.width/2;
+      king2.y=app.screen.height-king2.height;
+      let kingsaybg2=new Sprite(resources["images/kingsaybg2.png"].texture);
+      kingsaybg2.x=app.screen.width/2-kingsaybg2.width/2;
+      kingsaybg2.y=kingsaybg2.height/3;
+      let kingsay2=new Sprite(resources["images/kingsay2.png"].texture);
+      kingsay2.x=kingsaybg2.x+kingsaybg2.width/2-kingsay2.width/2;
+      kingsay2.y=kingsaybg2.y+kingsaybg2.height/2-kingsay2.height/2;
+      
+
+      let agree3=new Sprite(resources["images/agree3.png"].texture);
+      let disagree3=new Sprite(resources["images/disagree3.png"].texture);
+      agree3.x=app.screen.width/4-agree3.width/2;
+      agree3.y=app.screen.height-agree3.height-10;
+      disagree3.x=app.screen.width/2+10;
+      disagree3.y=app.screen.height-disagree3.height-10;
+
+      agree3.buttonMode=true;
+      disagree3.buttonMode=true;
+      agree3.interactive=true;
+      disagree3.interactive=true;
+      agree3.on("click",agree3Click)
+      .on("mouseover",mouseOver).on("mouseout",mouseOut);
+
+      disagree3.on("click",disagree3Click)
+      .on("mouseover",mouseOver).on("mouseout",mouseOut);
+
+      scenes[13].addChild(kingbg2);
+      scenes[13].addChild(king2);
+      scenes[13].addChild(kingsaybg2);
+      scenes[13].addChild(kingsay2);
+      scenes[13].addChild(agree3);
+      scenes[13].addChild(disagree3);
+    }, 1500);
   }
-  function kingMourceOver(){
+  function mouseOver(){
       this.scale.set(1.1, 1.1);
   }
-  function kingMourceOut(){
+  function mouseOut(){
       this.scale.set(1, 1);
   }
-
+  function agree3Click(){
+    setScene(14);
+    let kingbg3=new Sprite(resources["images/kingbg3.png"].texture);
+    let king3=new Sprite(resources["images/king3.png"].texture);
+    king3.x=app.screen.width/2-king3.width/2;
+    king3.y=app.screen.height-king3.height;
+    let kingsaybg3=new Sprite(resources["images/kingsaybg3.png"].texture);
+    kingsaybg3.x=app.screen.width/2-kingsaybg3.width/2;
+    kingsaybg3.y=kingsaybg3.height/3;
+    let kingsay3=new Sprite(resources["images/kingsay3.png"].texture);
+    kingsay3.x=kingsaybg3.x+kingsaybg3.width/2-kingsay3.width/2;
+    kingsay3.y=kingsaybg3.y+kingsaybg3.height/2-kingsay3.height/2;
+    scenes[14].addChild(kingbg3);
+    scenes[14].addChild(king3);
+    scenes[14].addChild(kingsaybg3);
+    scenes[14].addChild(kingsay3);
+    
+    setdownAndAgain(scenes[14]);
+  }
+  function disagree3Click(){
+    setScene(15);
+    let kingbg4=new Sprite(resources["images/kingbg4.png"].texture);
+    let king4=new Sprite(resources["images/king4.png"].texture);
+    king4.x=app.screen.width/2-king4.width/2;
+    king4.y=app.screen.height-king4.height;
+    let kingsaybg4=new Sprite(resources["images/kingsaybg4.png"].texture);
+    kingsaybg4.x=app.screen.width/2-kingsaybg4.width/2;
+    kingsaybg4.y=kingsaybg4.height/3;
+    let kingsay4=new Sprite(resources["images/kingsay4.png"].texture);
+    kingsay4.x=kingsaybg4.x+kingsaybg4.width/2-kingsay4.width/2;
+    kingsay4.y=kingsaybg4.y+kingsaybg4.height/2-kingsay4.height/2;
+    scenes[15].addChild(kingbg4);
+    scenes[15].addChild(king4);
+    scenes[15].addChild(kingsaybg4);
+    scenes[15].addChild(kingsay4);
+    
+    setdownAndAgain(scenes[15]);
+  }
   //minnv Scene 播放动画
   function minnvScene1Animal(delta,minnvbg1,minnv1,saybg,minnvsay1){
       if(state==1){
@@ -438,8 +513,8 @@ loader
           agree.interactive=true;
           disagree.buttonMode=true;
           disagree.interactive=true;
-          agree.on("click",agreeClick).on("mouseover",agreeMourseOver).on("mouseout",agreeMouseOut);
-          disagree.on("click",disagreeClick).on("mouseover",disagreeMourseOver).on("mouseout",disagreeMouseOut);
+          agree.on("click",agreeClick).on("mouseover",mouseOver).on("mouseout",mouseOut);
+          disagree.on("click",disagreeClick).on("mouseover",mouseOver).on("mouseout",mouseOut);
           hasChoose=true;
         }
       }
@@ -469,13 +544,6 @@ loader
     checkResult1=false;
     setTimeout(function(){app.ticker.add(delta => agreeSceneAnimal(delta,minnvbg3,minnv3,saybg3,minnvsay3))},200);
   }
-  function agreeMourseOver(){
-      this.scale.set(1.1, 1.1);
-  }
-  function agreeMouseOut(){
-      this.scale.set(1, 1);
-    
-  }
   function disagreeClick(){
     setScene(4);
     let minnvbg4=new Sprite(resources["images/minnvbg4.png"].texture);
@@ -499,13 +567,7 @@ loader
     checkResult2=false;
     setTimeout(function(){app.ticker.add(delta => disagreeSceneAnimal(delta,minnvbg4,minnv4,saybg4,minnvsay4))},200);
   }
-  function disagreeMourseOver(){
-      this.scale.set(1.1, 1.1);
-    
-  }
-  function disagreeMouseOut(){
-    this.scale.set(1, 1);
-  }
+  
   function agreeSceneAnimal(delta,minnvbg3,minnv3,saybg3,minnvsay3){
     minnv3.width*=peoperSpeed3;
     minnv3.height*=peoperSpeed3;
@@ -549,10 +611,10 @@ loader
             playagin.interactive=true;
             download.interactive=true;
             playagin.on("click",playaginClick)
-            .on("mouseover",playaginMourseOver).on("mouseout",playaginMourceOut);
+            .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
             download.on("click",downloadClick)
-            .on("mouseover",downloadMourseOver).on("mouseout",downloadMourceOut);
+            .on("mouseover",mouseOver).on("mouseout",mouseOut);
             scenes[4].addChild(playagin);
             scenes[4].addChild(download);
             scenes[4].addChild(result);
@@ -605,10 +667,10 @@ loader
           playagin.interactive=true;
           download.interactive=true;
           playagin.on("click",playaginClick)
-          .on("mouseover",playaginMourseOver).on("mouseout",playaginMourceOut);
+          .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
           download.on("click",downloadClick)
-          .on("mouseover",downloadMourseOver).on("mouseout",downloadMourceOut);
+          .on("mouseover",mouseOver).on("mouseout",mouseOut);
           scenes[5].addChild(minnvbg5);
           scenes[5].addChild(minnv5);
           scenes[5].addChild(saybg5);
@@ -674,27 +736,15 @@ loader
     // checkResult1=false;
     // setTimeout(function(){app.ticker.add(delta => agreeSceneAnimal(delta,minnvbg3,minnv3,saybg3,minnvsay3))},200);
   }
-  function downloadMourseOver(){
-      this.scale.set(1.1, 1.1);
-  }
-  function downloadMourceOut(){
-      this.scale.set(1, 1);
-    
-  }
+ 
   function downloadClick(){
   }
-  function playaginMourseOver(){
-      this.scale.set(1.1, 1.1);
-    
-  }
-  function playaginMourceOut(){
-    this.scale.set(1, 1);
-  }
+  
   function playaginClick(){
     location.reload();
   }
   function setdownAndAgain(scene){
-    let playagin=new Sprite(resources["images/playagin.png"].texture);
+      let playagin=new Sprite(resources["images/playagin.png"].texture);
       let download=new Sprite(resources["images/download.png"].texture);
       playagin.x=app.screen.width/4-playagin.width/2;
       playagin.y=app.screen.height-playagin.height-10;
@@ -706,10 +756,10 @@ loader
       playagin.interactive=true;
       download.interactive=true;
       playagin.on("click",playaginClick)
-      .on("mouseover",playaginMourseOver).on("mouseout",playaginMourceOut);
+      .on("mouseover",mouseOver).on("mouseout",mouseOut);
 
       download.on("click",downloadClick)
-      .on("mouseover",downloadMourseOver).on("mouseout",downloadMourceOut);
+      .on("mouseover",mouseOver).on("mouseout",mouseOut);
       scene.addChild(playagin);
       scene.addChild(download);
 
